@@ -3,7 +3,6 @@
 namespace SmartAIDocs\Services;
 
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class AiService
 {
@@ -14,41 +13,64 @@ class AiService
         $this->config = config('smart-ai-docs');
     }
 
-    public function ask($prompt, $provider = null)
+    public function ask($prompt, $provider = null, $taskType = 'docs')
     {
-        $config = config('smart-ai-docs');
-        $provider = $provider ?: $config['default'];
-        $settings = $config['providers'][$provider] ?? null;
+        $provider = $provider ?: ($this->config['default'] ?? 'ollama');
+        $settings = $this->config['providers'][$provider] ?? null;
 
-        if (!$settings || empty($settings['api_key'])) {
-            dump("⚠️ Configuration or API Key missing for provider: [$provider]");
+        if (!$settings) {
             return null;
+        }
+
+        $model = $settings['model'] ?? null;
+        if ($provider === 'ollama' && isset($settings['models']) && is_array($settings['models'])) {
+            $model = $settings['models'][$taskType] ?? $settings['models']['docs'];
         }
 
         try {
-            $url = rtrim($settings['base_url'], '/') . '/chat/completions';
+            $url = rtrim($settings['base_url'], '/');
+            $endpoint = ($provider === 'ollama') ? "$url/api/generate" : "$url/chat/completions";
 
-            $response = \Illuminate\Support\Facades\Http::withToken($settings['api_key'])
-                ->timeout(120)
-                ->post($url, [
-                    'model' => $settings['model'],
-                    'messages' => [
-                        ['role' => 'system', 'content' => "You are a Senior Laravel Developer. Output Markdown for docs and PHP for tests."],
-                        ['role' => 'user', 'content' => $prompt]
-                    ],
-                    'temperature' => 0.3,
-                ]);
+            $request = Http::timeout(150);
 
-            if ($response->successful()) {
-                return $response->json()['choices'][0]['message']['content'];
+            if (!empty($settings['api_key'])) {
+                $request->withToken($settings['api_key']);
             }
 
-            dump("❌ AI Error ($provider): " . $response->body());
+            $payload = $this->preparePayload($provider, $model, $prompt);
+            $response = $request->post($endpoint, $payload);
+
+            if ($response->successful()) {
+                return ($provider === 'ollama') 
+                    ? $response->json()['response'] 
+                    : $response->json()['choices'][0]['message']['content'];
+            }
+
             return null;
 
         } catch (\Exception $e) {
-            dump("🚨 Connection Error: " . $e->getMessage());
             return null;
         }
+    }
+
+    protected function preparePayload($provider, $model, $prompt)
+    {
+        if ($provider === 'ollama') {
+            return [
+                'model' => $model,
+                'prompt' => $prompt,
+                'stream' => false,
+                'system' => "You are a Senior Laravel Developer. Output Markdown for docs and PHP for tests."
+            ];
+        }
+
+        return [
+            'model' => $model,
+            'messages' => [
+                ['role' => 'system', 'content' => "You are a Senior Laravel Developer. Output Markdown for docs and PHP for tests."],
+                ['role' => 'user', 'content' => $prompt]
+            ],
+            'temperature' => 0.3,
+        ];
     }
 }

@@ -1,6 +1,7 @@
 {
     "name": "enasellithy/smart-ai-docs",
-    "description": "Advanced AI tool for Laravel (8-11) to generate Docs and Unit Tests using Kimi, Gemini, and Groq.",
+    "description": "Advanced AI tool for Laravel (8-11) to generate Docs and Unit Tests using Ollama, Gemini, and Groq.",
+    "version": "1.0.0",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -13,14 +14,15 @@
         "laravel",
         "php8",
         "ai-generator",
-        "gemini",
-        "groq",
+        "ollama",
+        "deepseek-coder",
         "documentation",
         "unit-test"
     ],
     "require": {
         "php": "^8.0",
-        "illuminate/support": "^8.0|^9.0|^10.0|^11.0|^12.0"
+        "illuminate/support": "^8.0|^9.0|^10.0|^11.0",
+        "guzzlehttp/guzzle": "^7.2"
     },
     "autoload": {
         "psr-4": {

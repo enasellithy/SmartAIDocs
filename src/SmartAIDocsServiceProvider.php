@@ -3,7 +3,6 @@
 namespace SmartAIDocs;
 
 use Illuminate\Support\ServiceProvider;
-use SmartAIDocs\Console\GenerateAiAssets;
 use SmartAIDocs\Services\AiService;
 
 class SmartAIDocsServiceProvider extends ServiceProvider
@@ -24,6 +23,7 @@ class SmartAIDocsServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__.'/../config/smart-ai-docs.php', 'smart-ai-docs');
+        
         $this->app->singleton(AiService::class, function () {
             return new AiService();
         });

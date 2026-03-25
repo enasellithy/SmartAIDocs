@@ -1,0 +1,26 @@
+name: Sync README to Wiki
+
+on:
+  push:
+    branches:
+      - master 
+      - main
+    paths:
+      - 'README.md'
+
+jobs:
+  sync-wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Sync README to Wiki
+        uses: Andrew-Chen-Wang/github-wiki-action@v4
+        with:
+          strategy: clone
+          wiki_folder: wiki
+          files: |
+            README.md:Home.md
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

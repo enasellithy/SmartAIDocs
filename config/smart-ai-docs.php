@@ -4,6 +4,13 @@ return [
     'default' => env('SMART_AI_PROVIDER', 'groq'),
 
     'providers' => [
+        'ollama' => [
+            'base_url' => env('OLLAMA_BASE_URL', 'http://localhost:11434'),
+            'models' => [
+                'docs' => env('OLLAMA_DOC_MODEL', 'deepseek-coder:6.7b'), 
+                'tests' => env('OLLAMA_TEST_MODEL', 'qwen2.5-coder:1.5b'),
+            ],
+        ],
         'groq' => [
             'api_key'  => env('GROQ_API_KEY'),
             'base_url' => 'https://api.groq.com/openai/v1',

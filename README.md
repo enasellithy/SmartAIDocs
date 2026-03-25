@@ -48,3 +48,18 @@ php artisan ai:generate app/Http/Controllers/UserController.php --test
 php artisan ai:generate app/Services/PaymentService.php --docs --test
 php artisan ai:generate app/Http/Controllers --docs --test
 ```
+
+### Ollama Support (Local AI)
+
+```bash
+
+ollama pull deepseek-coder:6.7b
+ollama pull qwen2.5-coder:1.5b
+
+```
+
+### Configuration
+
+in env 
+SMART_AI_DEFAULT=ollama
+OLLAMA_BASE_URL=http://localhost:11434
