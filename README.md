@@ -58,6 +58,13 @@ ollama pull qwen2.5-coder:1.5b
 
 ```
 
+```bash 
+
+composer require enasellithy/smart-ai-docs:v1.1.0
+
+```
+
+
 ### Configuration
 
 in env 
