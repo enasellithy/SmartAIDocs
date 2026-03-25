@@ -11,15 +11,17 @@ on:
 jobs:
   sync-wiki:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Sync README to Wiki
         uses: Andrew-Chen-Wang/github-wiki-action@v4
         with:
           strategy: clone
-          wiki_folder: wiki
+          wiki_folder: .
           files: |
             README.md:Home.md
         env:
