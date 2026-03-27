@@ -1,0 +1,42 @@
+name: AI Issue Solver
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  solve-issue:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Install Dependencies
+        run: composer install --no-interaction
+
+      - name: Run AI Solver
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SMART_AI_PROVIDER: groq
+        run: |
+          php artisan ai:solve-issue "${{ github.event.issue.title }}" "${{ github.event.issue.body }}"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "AI Fix for Issue #${{ github.event.issue.number }}"
+          title: "🤖 AI Fix: ${{ github.event.issue.title }}"
+          body: "This PR was automatically generated to solve issue #${{ github.event.issue.number }}."
+          branch: "ai-fix-issue-${{ github.event.issue.number }}"
