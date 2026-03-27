@@ -20,11 +20,12 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
+          extensions: mbstring, intl
 
       - name: Install Dependencies
         run: |
-            composer require orchestra/testbench --dev --no-interaction
-            composer install --no-interaction
+          composer require orchestra/testbench --dev --no-interaction --no-audit
+          composer install --no-interaction --no-audit
 
       - name: Run AI Solver
         env:
