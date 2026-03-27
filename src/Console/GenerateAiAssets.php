@@ -45,20 +45,21 @@ class GenerateAiAssets extends Command
     protected function processFile($path, $code, $ai)
     {
         if ($this->option('docs')) {
-            $prompt = "Act as a Senior Technical Writer. Convert the following Laravel code into a high-quality Wiki Documentation page.
-                1. Start with a Breadcrumb navigation (e.g., Docs > Module > Class).
-                2. Use H2 for the Class Name and a brief overview of its responsibility.
-                3. Group functions into logical sections (e.g., 'Data Access', 'Business Logic') instead of just listing them.
-                4. For each section, use narrative text to explain HOW the methods work together.
-                5. Use Callouts (e.g., > [!NOTE]) for important details.
-                6. DO NOT use only tables; use descriptive paragraphs.
-                
-                File Path: {$path}
-                Code: \n" . $code;
+    $prompt = "Act as a Senior Technical Writer. Convert the following Laravel code into a professional Markdown Documentation.
+        1. Use '### 📄 File: {$path}' as a header for each file.
+        2. Provide a brief sentence introducing the file's purpose.
+        3. Create a Markdown Table with exactly 3 columns:
+           | Name | Params | Desc |
+        4. In the 'Name' column, put the function name code-formatted (e.g., `index()`).
+        5. In the 'Params' column, list the parameters or 'N/A' if none.
+        6. In the 'Desc' column, provide a concise description of what the function does.
+        
+        File Path: {$path}
+        Code: \n" . $code;
 
-            $doc = $ai->ask($prompt);
-            if ($doc) $this->saveResult($path, $doc, 'md');
-        }
+    $doc = $ai->ask($prompt);
+    if ($doc) $this->saveResult($path, $doc, 'md');
+}
 
         if ($this->option('test')) {
             $prompt = "Generate a comprehensive PHPUnit test. Ensure you cover EVERY public function in this class with at least one test case. \n\n Code: \n" . $code;
