@@ -76,3 +76,4 @@ OLLAMA_BASE_URL=http://localhost:11434
 SMART_AI_PROVIDER=ollama
 OLLAMA_DOC_MODEL=deepseek-coder:6.7b
 OLLAMA_TEST_MODEL=qwen2.5-coder:1.5b
+SMART_AI_DOCS_PATH=docs
