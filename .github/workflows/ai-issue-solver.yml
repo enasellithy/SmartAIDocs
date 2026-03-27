@@ -22,7 +22,9 @@ jobs:
           php-version: '8.2'
 
       - name: Install Dependencies
-        run: composer install --no-interaction
+        run: |
+            composer require orchestra/testbench --dev --no-interaction
+            composer install --no-interaction
 
       - name: Run AI Solver
         env:
@@ -30,7 +32,7 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           SMART_AI_PROVIDER: groq
         run: |
-          php artisan ai:solve-issue "${{ github.event.issue.title }}" "${{ github.event.issue.body }}"
+          vendor/bin/testbench ai:solve-issue "${{ github.event.issue.title }}" "${{ github.event.issue.body }}"
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
