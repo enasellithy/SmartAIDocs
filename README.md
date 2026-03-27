@@ -62,11 +62,17 @@ ollama pull qwen2.5-coder:1.5b
 
 composer require enasellithy/smart-ai-docs:v1.1.0
 
+or 
+
+composer require enasellithy/smart-ai-docs:^2.0 --no-audit
+
 ```
 
 
 ### Configuration
 
-in env 
-SMART_AI_DEFAULT=ollama
+#### in env 
 OLLAMA_BASE_URL=http://localhost:11434
+SMART_AI_PROVIDER=ollama
+OLLAMA_DOC_MODEL=deepseek-coder:6.7b
+OLLAMA_TEST_MODEL=qwen2.5-coder:1.5b
