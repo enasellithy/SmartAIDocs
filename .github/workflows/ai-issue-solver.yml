@@ -24,7 +24,6 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          composer require orchestra/testbench --dev --no-interaction --no-audit
           composer install --no-interaction --no-audit
 
       - name: Run AI Solver
