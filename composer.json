@@ -1,7 +1,7 @@
 {
     "name": "enasellithy/smart-ai-docs",
     "description": "Advanced AI tool for Laravel (8-11) to generate Docs and Unit Tests using Ollama, Gemini, and Groq.",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "type": "library",
     "license": "MIT",
     "authors": [

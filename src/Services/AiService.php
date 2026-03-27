@@ -55,22 +55,24 @@ class AiService
 
     protected function preparePayload($provider, $model, $prompt)
     {
+        $systemMessage = "You are a Senior Technical Writer and Laravel Expert. Your goal is to generate professional, Wiki-style documentation (GitBook style). Use clear headings, nested lists, and descriptive paragraphs. Avoid dry tables unless comparing data.";
+
         if ($provider === 'ollama') {
             return [
                 'model' => $model,
                 'prompt' => $prompt,
                 'stream' => false,
-                'system' => "You are a Senior Laravel Developer. Output Markdown for docs and PHP for tests."
+                'system' => $systemMessage
             ];
         }
 
         return [
             'model' => $model,
             'messages' => [
-                ['role' => 'system', 'content' => "You are a Senior Laravel Developer. Output Markdown for docs and PHP for tests."],
+                ['role' => 'system', 'content' => $systemMessage],
                 ['role' => 'user', 'content' => $prompt]
             ],
-            'temperature' => 0.3,
+            'temperature' => 0.5,
         ];
     }
 }
